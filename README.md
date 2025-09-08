@@ -179,15 +179,15 @@ docker compose -f docker-compose.kvrocks.yml up -d
 
    - 访问 [Upstash](https://upstash.com/)
    - 创建免费 Redis 数据库
-   - 获取 `UPSTASH_REDIS_REST_URL` 和 `UPSTASH_REDIS_REST_TOKEN`
+   - 获取 `UPSTASH_URL` 和 `UPSTASH_TOKEN`
 
 4. **添加环境变量**：
 
 ```bash
 # 存储配置
 NEXT_PUBLIC_STORAGE_TYPE=upstash
-UPSTASH_REDIS_REST_URL=https://xxx.upstash.io
-UPSTASH_REDIS_REST_TOKEN=your_token
+UPSTASH_URL=https://xxx.upstash.io
+UPSTASH_TOKEN=your_token
 
 # 管理员账号
 USERNAME=admin
@@ -240,6 +240,8 @@ wrangler auth login
 
 # 创建数据库
 wrangler d1 create katelyatv-db
+# ⚠️ 重要：确保在项目根目录下运行此命令
+# 如果遇到文件路径错误，请参考 D1_MIGRATION.md 排查指南
 wrangler d1 execute katelyatv-db --file=./scripts/d1-init.sql
 ```
 
@@ -290,8 +292,8 @@ redis-cli -u $REDIS_URL ping
 wrangler d1 info your-database-name
 
 # Upstash连接测试
-curl -H "Authorization: Bearer $UPSTASH_REDIS_REST_TOKEN" \
-     $UPSTASH_REDIS_REST_URL/ping
+curl -H "Authorization: Bearer $UPSTASH_TOKEN" \
+     $UPSTASH_URL/ping
 ```
 
 ### 环境变量说明
@@ -303,8 +305,8 @@ curl -H "Authorization: Bearer $UPSTASH_REDIS_REST_TOKEN" \
 | `NEXT_PUBLIC_STORAGE_TYPE`    | 否     | 存储类型     | `redis/d1/upstash`       |
 | `NEXT_PUBLIC_ENABLE_REGISTER` | 否     | 用户注册     | `true/false`             |
 | `REDIS_URL`                   | 否\*\* | Redis 连接   | `redis://localhost:6379` |
-| `UPSTASH_REDIS_REST_URL`      | 否\*\* | Upstash 地址 | `https://xxx.upstash.io` |
-| `UPSTASH_REDIS_REST_TOKEN`    | 否\*\* | Upstash 令牌 | `AX_xxx`                 |
+| `UPSTASH_URL`                 | 否\*\* | Upstash 地址 | `https://xxx.upstash.io` |
+| `UPSTASH_TOKEN`               | 否\*\* | Upstash 令牌 | `AX_xxx`                 |
 
 > \*多用户部署必填 \*\*对应存储类型必填
 
@@ -312,8 +314,8 @@ curl -H "Authorization: Bearer $UPSTASH_REDIS_REST_TOKEN" \
 
 #### 推荐配置文件
 
-- **基础版**（20+站点）：[config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
-- **增强版**（94 站点）：[configplus.json](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+- **基础版**（20+站点）：[config_isadult.json](https://www.mediafire.com/file/upztrjc0g1ynbzy/config_isadult.json/file)
+- **增强版**（94 站点）：[configplus_isadult.json](https://www.mediafire.com/file/ff60ynj6z21iqfb/configplus_isadult.json/file)
 
 #### 配置方式
 
@@ -575,13 +577,13 @@ GET /api/admin/analytics
 }
 ```
 
-- 下载：[configplus.json](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+- 下载：[configplus_isadult.json](https://www.mediafire.com/file/ff60ynj6z21iqfb/configplus_isadult.json/file)
 - 重命名为 config.json 使用
 
 1. 下载配置文件：
 
-   - [基础版 config.json](https://www.mediafire.com/file/xl3yo7la2ci378w/config.json/file)
-   - [Plus 版（94 个片源）](https://www.mediafire.com/file/fbpk1mlupxp3u3v/configplus.json/file)
+   - [基础版 config_isadult.json](https://www.mediafire.com/file/upztrjc0g1ynbzy/config_isadult.json/file)
+   - [Plus 版（94 个片源）](https://www.mediafire.com/file/ff60ynj6z21iqfb/configplus_isadult.json/file)
 
 2. 配置方式：
    - **Docker**：挂载配置文件 `-v ./config.json:/app/config.json:ro`
@@ -919,26 +921,16 @@ server {
 
 ### 📖 详细指南
 
-**部署相关**：
-
-- [🐳 Docker 完整部署指南](DOCKER_DEPLOYMENT.md)
-- [☁️ Cloudflare Pages 详细配置](CLOUDFLARE_PAGES.md)
-- [🚀 Vercel 部署最佳实践](VERCEL_DEPLOYMENT.md)
-- [🔧 环境变量完整说明](ENVIRONMENT_VARIABLES.md)
-
 **功能配置**：
 
 - [📺 TVBox 兼容配置指南](docs/TVBOX.md)
 - [💾 Kvrocks 高性能部署](docs/KVROCKS.md)
 - [🗄️ D1 数据库迁移指南](D1_MIGRATION.md)
-- [⚡ Redis 集群配置](REDIS_CLUSTER.md)
 
 **故障排除**：
 
 - [🔧 Docker 故障排除手册](DOCKER_TROUBLESHOOTING.md)
-- [🌐 网络连接问题诊断](NETWORK_TROUBLESHOOTING.md)
 - [⚠️ 兼容性问题解决](DEPLOYMENT_COMPATIBILITY.md)
-- [🐛 常见错误代码说明](ERROR_CODES.md)
 
 ### 🎯 最佳实践
 
